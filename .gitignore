@@ -1,0 +1,3 @@
+./learn4rwkv/models/*.pth
+./learn4rwkv/models/RWKV-5-World-0.1B-v1-20230803-ctx4096.pth
+learn4rwkv/models/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096.pth
