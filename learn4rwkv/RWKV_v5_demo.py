@@ -103,20 +103,20 @@ def sample_logits(out, temperature=1.0, top_p=0.8):
 
 ########################################################################################################
 
-tokenizer = RWKV_TOKENIZER("math4science/learn4rwkv/tokenizer/rwkv_vocab_v20230424.txt")
+tokenizer = RWKV_TOKENIZER("/home/lbj/桌面/math4science/learn4rwkv/tokenizer/rwkv_vocab_v20230424.txt")
 # tokenizer = RWKV_TOKENIZER("tokenizer/rwkv_vocab_v20230424.txt")
 
 # THIS IS NOW UPDATED TO SUPPORT LATEST RWKV-5 WORLD v2 MODELS
 
 args = types.SimpleNamespace()
-args.MODEL_NAME = 'math4science/learn4rwkv/models/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
+args.MODEL_NAME = 'models/learn/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
 # args.MODEL_NAME = 'models/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
 args.n_layer = 24
 args.n_embd = 1024
 args.vocab_size = 65536
 
 # context = "\nElon Musk has"
-context = "\n所以，大语言是回归模型吗"
+context = "\n道可道,非常道"
 NUM_TRIALS = 8
 LENGTH_PER_TRIAL = 100
 TEMPERATURE = 1.0
