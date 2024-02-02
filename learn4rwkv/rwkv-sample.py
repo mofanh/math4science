@@ -130,7 +130,7 @@ for k in weights.keys():
 
 
 # Available at https://github.com/BlinkDL/ChatRWKV/blob/main/20B_tokenizer.json
-tokenizer = Tokenizer.from_file("math4science/learn4rwkv/tokenizer/20B_tokenizer.json")
+tokenizer = Tokenizer.from_file("/home/lbj/桌面/math4science/learn4rwkv/tokenizer/20B_tokenizer.json")
 
 print(f'\nPreprocessing context')
 
