@@ -14,5 +14,5 @@ int main()
     std::cout << s.pop() << std::endl; // 输出 2
     std::cout << s.pop() << std::endl; // 输出 1
 
-    // return 0;
+    return 0;
 }
