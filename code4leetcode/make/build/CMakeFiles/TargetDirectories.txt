@@ -1,0 +1,3 @@
+/home/lbj/桌面/math4science/code4leetcode/make/build/CMakeFiles/demo.dir
+/home/lbj/桌面/math4science/code4leetcode/make/build/CMakeFiles/edit_cache.dir
+/home/lbj/桌面/math4science/code4leetcode/make/build/CMakeFiles/rebuild_cache.dir
