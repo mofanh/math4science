@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <deque>
+#include <vector>
 
 int main() {
     // 使用std::deque作为底层容器的std::queue
@@ -17,6 +18,9 @@ int main() {
         std::cout << "Popping: " << front << std::endl;
         q.pop(); // 移除队头元素
     }
+
+    std::vector<int> vec3 = {1, 2, 3, 4, 5};
+    std::vector<int>* vec_ptr = &vec3; // 创建一个指向vec3的指针
 
     return 0;
 }

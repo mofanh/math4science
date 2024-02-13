@@ -4,7 +4,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 # 读取图像
-img = Image.open('/home/lbj/桌面/front/web-front/src/assets/lier-logo.png')
+# img = Image.open('/home/lbj/桌面/front/web-front/src/assets/lier-logo.png')
+img = Image.open(r'D:\工大生活\大三上\实训\作业\团队作业\ysqd\ysqd.front\src\assets\background-6556413_1920.jpg')
 
 # 定义变换
 transform = transforms.Compose([
