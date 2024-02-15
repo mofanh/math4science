@@ -126,7 +126,7 @@ args.n_embd = 1024
 args.vocab_size = 65536
 
 # context = "\nElon Musk has"
-context = "\nEnglish is"
+context = "\nEnglish and chinese and Janpanese are language"
 NUM_TRIALS = 3
 LENGTH_PER_TRIAL = 100
 TEMPERATURE = 1.0
@@ -248,14 +248,14 @@ class RWKV_RNN(MyModule):
                 )
 
             x = self.w.emb.weight[token]
-            plt.subplot(2, 2, 1)
-            plt.title("emb.weight")
-            plt.plot(x)
+            # plt.subplot(2, 3, 1)
+            # plt.title("emb.weight")
+            # plt.plot(x)
 
             x = self.layer_norm(x, self.w.blocks[0].ln0)
-            plt.subplot(2, 2, 2)
-            plt.title("layer_norm")
-            plt.plot(x)
+            # plt.subplot(2, 3, 2)
+            # plt.title("layer_norm")
+            # plt.plot(x)
 
             for i in range(self.args.n_layer):
                 att = self.w.blocks[i].att
@@ -289,14 +289,23 @@ class RWKV_RNN(MyModule):
                     ffn.receptance.weight,
                 )
 
-            plt.subplot(2, 2, 3)
-            plt.title(f"self.args.n_layer")
-            plt.plot(x)
+            # plt.subplot(2, 3, 3)
+            # plt.title(f"self.args.n_layer")
+            # plt.plot(x)
 
             x = self.w.head.weight @ self.layer_norm(x, self.w.ln_out)
-            plt.subplot(2, 2, 4)
-            plt.title("head.weight @ layer_norm(x, self.w.ln_out)")
-            plt.plot(x)
+
+            # plt.subplot(2, 3, 4)
+            # plt.title("head.weight")
+            # plt.imshow(self.w.head.weight)
+
+            # plt.subplot(2, 3, 5)
+            # plt.title("layer_norm(x, self.w.ln_out)")
+            # # plt.imshow(self.layer_norm(x, self.w.ln_out))
+
+            # plt.subplot(2, 3, 6)
+            # plt.title("head.weight @ layer_norm(x, self.w.ln_out)")
+            # plt.plot(x)
             return x.float(), state
 
 
@@ -305,8 +314,33 @@ model = RWKV_RNN(args)
 
 print(f"\nPreprocessing context (slow version. see v2/rwkv/model.py for fast version)")
 init_state = None
+
+length = len(tokenizer.encode(context))
+i = 1
 for token in tokenizer.encode(context):
     init_out, init_state = model.forward(token, init_state)
+
+    mean = torch.mean(init_state)
+
+    # 设置颜色映射，这里我们使用jet colormap，它对数据敏感，并且可以很好地展示数据的分布
+    cmap = plt.get_cmap("jet")
+
+    # 使用imshow函数展示矩阵，设置颜色映射和数据范围
+    plt.imshow(
+        init_state,
+        cmap=cmap,
+        vmin=mean - 1 * torch.std(init_state, unbiased=True),
+        vmax=mean + 1 * torch.std(init_state, unbiased=True),
+    )
+
+    # 添加颜色条
+    plt.colorbar()
+
+    plt.subplot(3, length / 2, i)
+    plt.title(f"state:{i}")
+    plt.imshow(init_state)
+    i = i + 1
+plt.show()
 
 for TRIAL in range(NUM_TRIALS):
     print(f"\n\n--[ Trial {TRIAL} ]-----------------", context, end="")
@@ -324,8 +358,6 @@ for TRIAL in range(NUM_TRIALS):
         except:
             pass
         out, state = model.forward(token, state)
-        plt.show()
-
         # plt.subplot(LENGTH_PER_TRIAL/10, LENGTH_PER_TRIAL/10, i+1)
         # plt.title(i+1)
         # # plt.imshow(out)
