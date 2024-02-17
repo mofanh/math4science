@@ -113,16 +113,16 @@ def sample_logits(out, temperature=1.0, top_p=0.8):
 
 ########################################################################################################
 
-# tokenizer = RWKV_TOKENIZER("/home/lbj/桌面/math4science/learn4rwkv/tokenizer/rwkv_vocab_v20230424.txt")
-tokenizer = RWKV_TOKENIZER(
-    r"G:\math4science\learn4rwkv\tokenizer\rwkv_vocab_v20230424.txt"
-)
+tokenizer = RWKV_TOKENIZER("/home/lbj/桌面/math4science/learn4rwkv/tokenizer/rwkv_vocab_v20230424.txt")
+# tokenizer = RWKV_TOKENIZER(
+#     r"G:\math4science\learn4rwkv\tokenizer\rwkv_vocab_v20230424.txt"
+# )
 
 # THIS IS NOW UPDATED TO SUPPORT LATEST RWKV-5 WORLD v2 MODELS
 
 args = types.SimpleNamespace()
-args.MODEL_NAME = r"G:\models\RWKV-5-World-0.4B-v2-20231113-ctx4096"
-# args.MODEL_NAME = 'models/learn/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
+# args.MODEL_NAME = r"G:\models\RWKV-5-World-0.4B-v2-20231113-ctx4096"
+args.MODEL_NAME = 'models/learn/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
 # args.MODEL_NAME = 'models/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
 args.n_layer = 24
 args.n_embd = 1024
@@ -322,6 +322,7 @@ length = len(tokenizer.encode(context))
 i = 1
 
 for token in tokenizer.encode(context):
+    old_state = init_state
     init_out, init_state = model.forward(token, init_state)
 
     # 计算均值和标准差
@@ -331,6 +332,8 @@ for token in tokenizer.encode(context):
     # 设置颜色映射
     cmap = plt.get_cmap("jet")
 
+    plt.subplot(1, 2, 1)
+
     # 使用imshow函数展示矩阵
     plt.imshow(
         init_state,
@@ -338,21 +341,42 @@ for token in tokenizer.encode(context):
         vmin=mean - 1 * std,
         vmax=mean + 1 * std,
     )
+    # 设置子图标题
+    plt.title(f"state{i}:{token}")
+
+    plt.subplot(1, 2, 2)
+    
+    if old_state == None:
+        plt.imshow(
+            init_state,
+            cmap=cmap,
+            vmin=mean - 1 * std,
+            vmax=mean + 1 * std,
+        )
+    else:
+        mean = torch.mean(init_state - old_state)
+        std = torch.std(init_state - old_state, unbiased=True)
+        plt.imshow(
+            init_state - old_state,
+            cmap=cmap,
+            vmin=mean - 1 * std,
+            vmax=mean + 1 * std,
+        )
 
     # 添加颜色条
     # plt.colorbar()
 
     # 设置子图标题
-    plt.title(f"state{i}:{token}")
+    plt.title(f"state{i} - state{i-1}")
 
     # 保存图像
-    plt.savefig(f"temp\\state_{i}.png", dpi=3000, bbox_inches="tight")
+    plt.savefig(f"/home/lbj/桌面/math4science/temp/state_{i}.png", dpi=3000, bbox_inches="tight")
 
     # 更新计数器
     i += 1
 
 # 在循环结束后显示所有子图
-plt.show()
+# plt.show()
 
 for TRIAL in range(NUM_TRIALS):
     print(f"\n\n--[ Trial {TRIAL} ]-----------------", context, end="")
