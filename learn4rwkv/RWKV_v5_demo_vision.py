@@ -9,6 +9,7 @@ import types, torch
 import torch.nn as nn
 from torch.nn import functional as F
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 MyModule = torch.jit.ScriptModule
 MyFunction = torch.jit.script_method
@@ -113,7 +114,9 @@ def sample_logits(out, temperature=1.0, top_p=0.8):
 ########################################################################################################
 
 # tokenizer = RWKV_TOKENIZER("/home/lbj/桌面/math4science/learn4rwkv/tokenizer/rwkv_vocab_v20230424.txt")
-tokenizer = RWKV_TOKENIZER(r"learn4rwkv\tokenizer\rwkv_vocab_v20230424.txt")
+tokenizer = RWKV_TOKENIZER(
+    r"G:\math4science\learn4rwkv\tokenizer\rwkv_vocab_v20230424.txt"
+)
 
 # THIS IS NOW UPDATED TO SUPPORT LATEST RWKV-5 WORLD v2 MODELS
 
@@ -317,29 +320,38 @@ init_state = None
 
 length = len(tokenizer.encode(context))
 i = 1
+
 for token in tokenizer.encode(context):
     init_out, init_state = model.forward(token, init_state)
 
+    # 计算均值和标准差
     mean = torch.mean(init_state)
+    std = torch.std(init_state, unbiased=True)
 
-    # 设置颜色映射，这里我们使用jet colormap，它对数据敏感，并且可以很好地展示数据的分布
+    # 设置颜色映射
     cmap = plt.get_cmap("jet")
 
-    # 使用imshow函数展示矩阵，设置颜色映射和数据范围
+    # 使用imshow函数展示矩阵
     plt.imshow(
         init_state,
         cmap=cmap,
-        vmin=mean - 1 * torch.std(init_state, unbiased=True),
-        vmax=mean + 1 * torch.std(init_state, unbiased=True),
+        vmin=mean - 1 * std,
+        vmax=mean + 1 * std,
     )
 
     # 添加颜色条
-    plt.colorbar()
+    # plt.colorbar()
 
-    plt.subplot(3, length / 2, i)
-    plt.title(f"state:{i}")
-    plt.imshow(init_state)
-    i = i + 1
+    # 设置子图标题
+    plt.title(f"state{i}:{token}")
+
+    # 保存图像
+    plt.savefig(f"temp\\state_{i}.png", dpi=3000, bbox_inches="tight")
+
+    # 更新计数器
+    i += 1
+
+# 在循环结束后显示所有子图
 plt.show()
 
 for TRIAL in range(NUM_TRIALS):
@@ -365,4 +377,3 @@ for TRIAL in range(NUM_TRIALS):
     # plt.show()
 
 print("\n")
-# plt.show()
