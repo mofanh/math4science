@@ -122,7 +122,7 @@ tokenizer = RWKV_TOKENIZER("/home/lbj/桌面/math4science/learn4rwkv/tokenizer/r
 
 args = types.SimpleNamespace()
 # args.MODEL_NAME = r"G:\models\RWKV-5-World-0.4B-v2-20231113-ctx4096"
-args.MODEL_NAME = 'models/learn/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
+args.MODEL_NAME = '/home/lbj/桌面/models/learn/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
 # args.MODEL_NAME = 'models/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
 args.n_layer = 24
 args.n_embd = 1024
@@ -320,9 +320,10 @@ init_state = None
 
 length = len(tokenizer.encode(context))
 i = 1
-
+old_state = torch.zeros(args.n_layer * (2 + 64), args.n_embd)
 for token in tokenizer.encode(context):
-    old_state = init_state
+    if init_state != None:
+        old_state = init_state.clone()
     init_out, init_state = model.forward(token, init_state)
 
     # 计算均值和标准差
@@ -354,6 +355,7 @@ for token in tokenizer.encode(context):
             vmax=mean + 1 * std,
         )
     else:
+        minus = init_state - old_state
         mean = torch.mean(init_state - old_state)
         std = torch.std(init_state - old_state, unbiased=True)
         plt.imshow(
