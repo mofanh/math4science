@@ -1,13 +1,20 @@
-async function SerialFlow() {
-  let result1 = await doJob(1, 1);
-  let result2 = await doJob(2, 2);
-  let result3 = await doJob(3, 3);
+const emp = [];
+emp[3.4] = "Casey Jones";
+emp[1] = "Phil Lesh";
+emp[2] = "August West";
+emp.length = 10;
 
-  let finalResult = result1 + result2 + result3;
-
-  console.log(finalResult);
-
-  return finalResult;
+for (let a of emp) {
+  console.log(a);
 }
+console.log("\n***\n");
+for (let i = 0; i < emp.length; i++) {
+  console.log(emp[i]);
+}
+console.log("\n***\n");
+emp.map((element) => {
+  console.log(element.slice(0, -1));
+  return element.toUpperCase();
+});
 
-SerialFlow();
+console.log(emp);
