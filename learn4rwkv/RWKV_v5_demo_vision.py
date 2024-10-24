@@ -113,16 +113,16 @@ def sample_logits(out, temperature=1.0, top_p=0.8):
 
 ########################################################################################################
 
-tokenizer = RWKV_TOKENIZER("/home/lbj/桌面/math4science/learn4rwkv/tokenizer/rwkv_vocab_v20230424.txt")
-# tokenizer = RWKV_TOKENIZER(
-#     r"G:\math4science\learn4rwkv\tokenizer\rwkv_vocab_v20230424.txt"
-# )
+# tokenizer = RWKV_TOKENIZER("/home/lbj/桌面/math4science/learn4rwkv/tokenizer/rwkv_vocab_v20230424.txt")
+tokenizer = RWKV_TOKENIZER(
+    r"G:\math4science\learn4rwkv\tokenizer\rwkv_vocab_v20230424.txt"
+)
 
 # THIS IS NOW UPDATED TO SUPPORT LATEST RWKV-5 WORLD v2 MODELS
 
 args = types.SimpleNamespace()
-# args.MODEL_NAME = r"G:\models\RWKV-5-World-0.4B-v2-20231113-ctx4096"
-args.MODEL_NAME = '/home/lbj/桌面/models/learn/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
+args.MODEL_NAME = r"G:\models\RWKV-5-World-0.4B-v2-20231113-ctx4096"
+# args.MODEL_NAME = '/home/lbj/桌面/models/learn/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
 # args.MODEL_NAME = 'models/RWKV-5-World-0B4-v2-OnlyForTest_71%_trained-20231104-ctx4096'
 args.n_layer = 24
 args.n_embd = 1024
@@ -355,7 +355,7 @@ for token in tokenizer.encode(context):
             vmax=mean + 1 * std,
         )
     else:
-        minus = init_state - old_state
+        # minus = init_state - old_state
         mean = torch.mean(init_state - old_state)
         std = torch.std(init_state - old_state, unbiased=True)
         plt.imshow(
@@ -372,7 +372,8 @@ for token in tokenizer.encode(context):
     plt.title(f"state{i} - state{i-1}")
 
     # 保存图像
-    plt.savefig(f"/home/lbj/桌面/math4science/temp/state_{i}.png", dpi=3000, bbox_inches="tight")
+    # plt.savefig(f"/home/lbj/桌面/math4science/temp/state_{i}.png", dpi=3000, bbox_inches="tight")
+    plt.savefig(f"temp\\state_{i}.png", dpi=3000, bbox_inches="tight")
 
     # 更新计数器
     i += 1
