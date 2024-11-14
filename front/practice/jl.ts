@@ -10,7 +10,7 @@ function jl(fn, wait) {
         }
     }
 }
-
+   
 const jl1 = jl(() => {
     console.log("1");
 }, 2000)
