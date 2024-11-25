@@ -1,21 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Center Text in Div</title>
-    <style>
-      .center-div {
-        width: 100px;
-        height: 100px;
-        background-color: lightblue;
-        display: flex; /* 使用Flexbox布局 */
-        justify-content: center; /* 水平居中 */
-        align-items: center; /* 垂直居中 */
-      }
-    </style>
-  </head>
-  <body>
-    <div class="center-div">文本</div>
-  </body>
-</html>
+<style>
+  #flex {
+    display: flex;
+    background-color: skyblue;
+    height: 100px;
+    line-height: 100px;
+  }
+
+  #left,
+  .right {
+    width: 200px;
+  }
+  #center {
+    background: pink;
+    /*flex:1*/
+    /*等价于*/
+    flex-grow: 1;
+    text-align: center;
+  }
+</style>
+
+<div id="flex">
+  <div id="left">我在左边,width: 200px;</div>
+  <div id="center">我在中间，自适应</div>
+  <div class="right">我在右边，width：200px</div>
+</div>
